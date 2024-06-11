@@ -1,0 +1,90 @@
+cloud-architecture-diagram
+
+title High Level Design
+typeface mono
+styleMode plain
+colorMode bold
+
+Australia[icon: globe] {
+  UsersAu[icon: users]
+}
+
+UnitedStates[icon: globe] {
+  UsersUs[icon: users]
+}
+
+AwsAccount[icon: aws-account, label: "AWS Account"] {
+  Route53[icon: aws-route-53]
+
+  AwsRegionAu[icon: aws-region, label: "ap-southeast-2"] {
+    VpcAu[icon: aws-vpc, label: "VPC"] {
+      PublicSubnetAu[icon: aws-public-subnet, label: "Public Subnet"] {
+        LoadBalancerAu[icon: aws-application-load-balancer, label: "Load Balancer"]
+      }
+      PrivateSubnetAu[icon: aws-public-subnet, lavel: "Private Subnet"] {
+        EcsAu[icon: aws-ecs, label: "ECS"] {
+          Ec2AsgAu[icon: aws-ec2-auto-scaling, label: "Auto Scaling Group"] {
+            Ec2Au[icon: aws-ec2, label: "EC2"] {
+              EcsServiceAu[icon: aws-ecs, label: "ECS Service"] {
+                EcsTaskAu[icon: aws-ecs, label: "ECS Task"] {
+                  DockerAu[icon: docker, label: "Docker"]
+                }
+              }
+            }
+          }
+        }
+      }
+      SecureSubnetAu[icon: aws-public-subnet, label: "Secure Subnet"] {
+       
+        RdsSqlServerAu[icon: aws-rds, label: "RDS"] {
+          SqlServerAu[icon: sql-server, label: "SQL Server"]
+        }
+         RdsPostgressAu[icon: aws-rds, label: "RDS"] {
+          PostgressAu[icon: postgres, label: "Postgress"]
+        }
+      }
+    }
+  }
+
+  AwsRegionUs[icon: aws-region, label: "us-east-1"] {
+    VpcUs[icon: aws-vpc, label: "VPC"] {
+      PublicSubnetUs[icon: aws-public-subnet, label: "Public Subnet"] {
+        LoadBalancerUs[icon: aws-application-load-balancer, label: "Load Balancer"]
+      }
+      PrivateSubnetUs[icon: aws-public-subnet, lavel: "Private Subnet"] {
+        EcsUs[icon: aws-ecs, label: "ECS"] {
+          Ec2AsgUs[icon: aws-ec2-auto-scaling, label: "Auto Scaling Group"] {
+            Ec2Us[icon: aws-ec2, label: "EC2"] {
+              EcsServiceUs[icon: aws-ecs, label: "ECS Service"] {
+                EcsTaskUs[icon: aws-ecs, label: "ECS Task"] {
+                  DockerUs[icon: docker, label: "Docker"]
+                }
+              }
+            }
+          }
+        }
+      }
+      SecureSubnetUs[icon: aws-public-subnet, label: "Secure Subnet"] {
+        RdsPostgressUs[icon: aws-rds, label: "RDS"] {
+          PostgressUs[icon: postgres, label: "Postgress"]
+        }
+        RdsSqlServerUs[icon: aws-rds, label: "RDS"] {
+          SqlServerUs[icon: sql-server, label: "SQL Server"]
+        }
+      }
+    }
+  }
+}
+
+// Australia
+UsersAu > Route53: "app.canibuild.com"
+Route53 > LoadBalancerAu: "app.au.canibuild.com" > DockerAu 
+
+DockerAu > RdsPostgressAu, SqlServerAu
+
+// USA
+UsersUs > Route53: "app.canibuild.com"
+Route53 > LoadBalancerUs: "app.us.canibuild.com" > DockerUs
+
+DockerUs > RdsPostgressUs
+DockerUs > SqlServerUs
